@@ -1,5 +1,6 @@
 @extends( "layouts.master" )
-
+@section ("title", "Termékek")
+@section ("mastertext", "Termékek")
 @section( "content" )
 
 <a href="/new-perfume"><button>Új termék</button></a>
@@ -31,6 +32,6 @@
                 </td>
             </tr>
         @endforeach
-    </tbody>   
+    </tbody>
 </table>
 @endsection

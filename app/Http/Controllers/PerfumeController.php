@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Perfume;
+use Validator;
 
 class PerfumeController extends Controller
 {
@@ -10,7 +12,9 @@ class PerfumeController extends Controller
 
         $perfumes = Perfume::all();
 
-        return view( "/perfumes" );
+        return view( "perfumes", [
+            "perfumes" => $perfumes
+        ]);
     }
 
     public function newPerfume() {
@@ -20,6 +24,15 @@ class PerfumeController extends Controller
 
     public function storePerfume( Request $request ) {
 
+        $validator = Validator::make($request->all(), [
+            "name"=>"required",
+            "type"=>"required",
+            "price"=>"required",
+        ]);
+        if ($validator->fails()) {
+            return ("Érvénytelen");
+        }
+
         $perfume = new Perfume;
 
         $perfume->name = $request->name;
@@ -28,7 +41,7 @@ class PerfumeController extends Controller
 
         $perfume->save();
 
-        return redirect( "/new-perfume" );
+        return redirect( "/" );
     }
 
     public function editPerfume( $id ) {
@@ -42,6 +55,10 @@ class PerfumeController extends Controller
 
     public function updatePerfume( Request $request ) {
 
+        $perfume = Perfume::find($request["id"]);
+        $perfume->update($request->all());
+
+        return redirect("/");
     }
 
     public function deletePerfume( $id ) {
@@ -49,6 +66,6 @@ class PerfumeController extends Controller
         $perfume = Perfume::find( $id );
         $perfume->delete();
 
-        return redirect( "/perfumes" );
+        return redirect( "perfumes" );
     }
 }
